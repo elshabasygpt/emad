@@ -6,22 +6,107 @@ datasource db {
   provider = "postgresql"
 }
 
-model Product {
+// ----------------------------------------
+// Admin User
+// ----------------------------------------
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ----------------------------------------
+// Global Settings (Singleton)
+// ----------------------------------------
+model SiteSettings {
+  id          Int      @id @default(autoincrement())
+  siteName    String   @default("عماد الحلواني للوحات الكهربائية")
+  email1      String   @default("info@emad-panels.com")
+  email2      String?
+  phone1      String   @default("+20 100 123 4567")
+  phone2      String?
+  address     String   @default("المنطقة الصناعية الثالثة، مدينة العاشر من رمضان")
+  facebook    String?
+  linkedin    String?
+  youtube     String?
+  heroTitle   String   @default("عماد الحلواني للوحات الكهربائية")
+  heroSubtitle String  @default("نقدم أحدث الحلول المتكاملة في تصميم وتصنيع اللوحات الكهربائية")
+  aboutText   String   @default("نحن مصنع عماد الحلواني، رواد صناعة اللوحات الكهربائية...")
+  updatedAt   DateTime @updatedAt
+}
+
+// ----------------------------------------
+// Dynamic Content Models
+// ----------------------------------------
+model Project {
   id          Int      @id @default(autoincrement())
   title       String
-  code        String   @unique
   description String?
+  sector      String   // e.g., 'industrial', 'medical'
   imageUrl    String?
+  isFeatured  Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
 
-model Contact {
+model Client {
   id        Int      @id @default(autoincrement())
   name      String
-  email     String?
-  phone     String
-  message   String
-  isRead    Boolean  @default(false)
+  logoUrl   String
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
+
+model Certificate {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String?
+  imageUrl    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Service {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  iconName    String   // e.g., 'FaIndustry'
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// ----------------------------------------
+// Form Submissions
+// ----------------------------------------
+model Contact {
+  id          Int      @id @default(autoincrement())
+  name        String
+  company     String?
+  email       String?
+  phone       String
+  inquiryType String?
+  message     String
+  isRead      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+}
+
+model QuoteRequest {
+  id              Int      @id @default(autoincrement())
+  name            String
+  role            String
+  company         String
+  email           String
+  phone           String
+  projectName     String
+  projectSector   String
+  projectLocation String
+  panelTypes      String[] // Array of selected panels
+  additionalNotes String?
+  fileUrl         String?  // Optional uploaded file link
+  isRead          Boolean  @default(false)
+  createdAt       DateTime @default(now())
+}
+
