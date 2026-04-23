@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
-import { FaHome, FaProjectDiagram, FaUsers, FaCertificate, FaCog, FaSignOutAlt, FaEnvelope, FaFileInvoiceDollar, FaBars, FaTimes } from 'react-icons/fa';
+import { FaHome, FaProjectDiagram, FaUsers, FaCertificate, FaCog, FaSignOutAlt, FaEnvelope, FaFileInvoiceDollar, FaBars } from 'react-icons/fa';
 
 const AdminLayout: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(true);
