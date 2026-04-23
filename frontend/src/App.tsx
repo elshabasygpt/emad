@@ -1,5 +1,5 @@
 
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import AboutPage from './pages/AboutPage';
@@ -13,12 +13,39 @@ import QuotePage from './pages/QuotePage';
 import Footer from './components/Footer';
 import WhatsAppButton from './components/WhatsAppButton';
 
+// Admin Pages
+import AdminLogin from './pages/admin/AdminLogin';
+import AdminLayout from './pages/admin/AdminLayout';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import AdminPlaceholder from './pages/admin/AdminPlaceholder';
+
+const PublicLayout = () => (
+  <div className="font-sans text-gray-800 antialiased overflow-x-hidden selection:bg-accent selection:text-white">
+    <Navbar />
+    <Outlet />
+    <Footer />
+    <WhatsAppButton />
+  </div>
+);
+
 function App() {
   return (
     <Router>
-      <div className="font-sans text-gray-800 antialiased overflow-x-hidden selection:bg-accent selection:text-white">
-        <Navbar />
-        <Routes>
+      <Routes>
+        {/* Admin Routes */}
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route path="dashboard" element={<AdminDashboard />} />
+          <Route path="projects" element={<AdminPlaceholder title="إدارة المشاريع" />} />
+          <Route path="clients" element={<AdminPlaceholder title="إدارة العملاء" />} />
+          <Route path="certificates" element={<AdminPlaceholder title="إدارة الشهادات" />} />
+          <Route path="messages" element={<AdminPlaceholder title="رسائل التواصل" />} />
+          <Route path="quotes" element={<AdminPlaceholder title="طلبات عروض السعر" />} />
+          <Route path="settings" element={<AdminPlaceholder title="إعدادات الموقع" />} />
+        </Route>
+
+        {/* Public Routes */}
+        <Route element={<PublicLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/products" element={<ProductsPage />} />
@@ -28,10 +55,8 @@ function App() {
           <Route path="/certificates" element={<CertificatesPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/quote" element={<QuotePage />} />
-        </Routes>
-        <Footer />
-        <WhatsAppButton />
-      </div>
+        </Route>
+      </Routes>
     </Router>
   );
 }
