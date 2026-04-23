@@ -17,6 +17,7 @@ import WhatsAppButton from './components/WhatsAppButton';
 import AdminLogin from './pages/admin/AdminLogin';
 import AdminLayout from './pages/admin/AdminLayout';
 import AdminDashboard from './pages/admin/AdminDashboard';
+import AdminSettings from './pages/admin/AdminSettings';
 import AdminPlaceholder from './pages/admin/AdminPlaceholder';
 
 const PublicLayout = () => (
@@ -41,7 +42,7 @@ function App() {
           <Route path="certificates" element={<AdminPlaceholder title="إدارة الشهادات" />} />
           <Route path="messages" element={<AdminPlaceholder title="رسائل التواصل" />} />
           <Route path="quotes" element={<AdminPlaceholder title="طلبات عروض السعر" />} />
-          <Route path="settings" element={<AdminPlaceholder title="إعدادات الموقع" />} />
+          <Route path="settings" element={<AdminSettings />} />
         </Route>
 
         {/* Public Routes */}

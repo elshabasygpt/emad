@@ -13,12 +13,40 @@ const Navbar: React.FC = () => {
   const [activeLink, setActiveLink] = useState('الرئيسية');
   const location = useLocation();
 
+  const [settings, setSettings] = useState({
+    email1: 'info@emad-panels.com',
+    phone1: '0100 123 4567',
+    address: 'المنوفية - شبين الكوم',
+    facebook: '#',
+    youtube: '#',
+    linkedin: '#'
+  });
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    // Fetch settings from API
+    fetch('http://localhost:5000/api/settings')
+      .then(res => res.json())
+      .then(data => {
+        if (data) {
+          setSettings({
+            email1: data.email1 || 'info@emad-panels.com',
+            phone1: data.phone1 || '0100 123 4567',
+            address: data.address || 'المنوفية - شبين الكوم',
+            facebook: data.facebook || '#',
+            youtube: data.youtube || '#',
+            linkedin: data.linkedin || '#'
+          });
+        }
+      })
+      .catch(err => console.error('Error fetching settings:', err));
   }, []);
 
   const navLinks = [
@@ -44,26 +72,34 @@ const Navbar: React.FC = () => {
           {/* Contact Info */}
           <div className="flex flex-wrap items-center gap-4 md:gap-6 justify-center">
             <div className="flex items-center gap-2">
-              <span dir="ltr">info@emadelhelwany.com</span>
+              <span dir="ltr">{settings.email1}</span>
               <FaEnvelope className="text-accent text-lg" />
             </div>
             <span className="text-gray-500 hidden md:inline">|</span>
             <div className="flex items-center gap-2">
-              <span dir="ltr" className="font-bold">0100 123 4567</span>
+              <span dir="ltr" className="font-bold">{settings.phone1}</span>
               <FaPhoneAlt className="text-accent text-lg" />
             </div>
             <span className="text-gray-500 hidden md:inline">|</span>
             <div className="flex items-center gap-2">
-              <span>المنوفية - شبين الكوم</span>
+              <span>{settings.address}</span>
               <FaMapMarkerAlt className="text-accent text-lg" />
             </div>
           </div>
 
           {/* Social Icons */}
           <div className="flex items-center gap-4 text-gray-300">
-            <a href="#" className="hover:text-white transition-colors"><FaFacebookF /></a>
-            <a href="#" className="hover:text-white transition-colors"><FaYoutube /></a>
-            <a href="#" className="hover:text-white transition-colors"><FaLinkedinIn /></a>
+            {settings.facebook && settings.facebook !== '#' && <a href={settings.facebook} target="_blank" rel="noreferrer" className="hover:text-white transition-colors"><FaFacebookF /></a>}
+            {settings.youtube && settings.youtube !== '#' && <a href={settings.youtube} target="_blank" rel="noreferrer" className="hover:text-white transition-colors"><FaYoutube /></a>}
+            {settings.linkedin && settings.linkedin !== '#' && <a href={settings.linkedin} target="_blank" rel="noreferrer" className="hover:text-white transition-colors"><FaLinkedinIn /></a>}
+            {/* Show defaults if all are empty */}
+            {(!settings.facebook || settings.facebook === '#') && (!settings.youtube || settings.youtube === '#') && (!settings.linkedin || settings.linkedin === '#') && (
+               <>
+                 <a href="#" className="hover:text-white transition-colors"><FaFacebookF /></a>
+                 <a href="#" className="hover:text-white transition-colors"><FaYoutube /></a>
+                 <a href="#" className="hover:text-white transition-colors"><FaLinkedinIn /></a>
+               </>
+            )}
           </div>
         </div>
       </div>
