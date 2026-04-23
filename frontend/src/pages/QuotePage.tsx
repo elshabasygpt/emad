@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { FaAngleLeft, FaFileInvoiceDollar, FaCheckCircle, FaCloudUploadAlt, FaPaperPlane, FaUserTie, FaProjectDiagram, FaCogs } from 'react-icons/fa';
+import { FaFileInvoiceDollar, FaCheckCircle, FaCloudUploadAlt, FaPaperPlane, FaUserTie, FaProjectDiagram, FaCogs } from 'react-icons/fa';
 
 const QuotePage: React.FC = () => {
   const [formData, setFormData] = useState({
