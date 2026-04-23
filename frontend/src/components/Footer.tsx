@@ -1,7 +1,35 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaMapMarkerAlt, FaPhoneAlt, FaEnvelope, FaBolt, FaFacebookF, FaLinkedinIn, FaYoutube } from 'react-icons/fa';
 
 const Footer: React.FC = () => {
+  const [settings, setSettings] = useState({
+    email1: 'info@emad-panels.com',
+    phone1: '+20 100 123 4567',
+    address: 'المنطقة الصناعية الثالثة، مدينة العاشر من رمضان',
+    facebook: '#',
+    youtube: '#',
+    linkedin: '#'
+  });
+
+  useEffect(() => {
+    fetch('http://localhost:5000/api/settings')
+      .then(res => res.json())
+      .then(data => {
+        if (data) {
+          setSettings(prev => ({
+            ...prev,
+            email1: data.email1 || prev.email1,
+            phone1: data.phone1 || prev.phone1,
+            address: data.address || prev.address,
+            facebook: data.facebook || prev.facebook,
+            youtube: data.youtube || prev.youtube,
+            linkedin: data.linkedin || prev.linkedin
+          }));
+        }
+      })
+      .catch(err => console.error(err));
+  }, []);
+
   return (
     <footer className="bg-primary text-gray-300 pt-20 pb-8 border-t border-white/10 relative overflow-hidden">
       {/* Background decoration */}
@@ -25,15 +53,21 @@ const Footer: React.FC = () => {
               شريكك الموثوق في تقديم حلول الطاقة المتكاملة. متخصصون في تصميم وتصنيع اللوحات الكهربائية بأعلى معايير الجودة العالمية لتلبية كافة احتياجات القطاع الصناعي والتجاري.
             </p>
             <div className="flex gap-3">
-              <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-accent hover:text-white transition-colors">
-                <FaFacebookF />
-              </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-accent hover:text-white transition-colors">
-                <FaLinkedinIn />
-              </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-accent hover:text-white transition-colors">
-                <FaYoutube />
-              </a>
+              {settings.facebook !== '#' && (
+                <a href={settings.facebook} target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-accent hover:text-white transition-colors">
+                  <FaFacebookF />
+                </a>
+              )}
+              {settings.linkedin !== '#' && (
+                <a href={settings.linkedin} target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-accent hover:text-white transition-colors">
+                  <FaLinkedinIn />
+                </a>
+              )}
+              {settings.youtube !== '#' && (
+                <a href={settings.youtube} target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-accent hover:text-white transition-colors">
+                  <FaYoutube />
+                </a>
+              )}
             </div>
           </div>
 
@@ -61,15 +95,15 @@ const Footer: React.FC = () => {
             <ul className="space-y-4 font-medium text-sm">
               <li className="flex gap-3 items-start">
                 <FaMapMarkerAlt className="text-accent text-lg flex-shrink-0 mt-1" />
-                <span>المنطقة الصناعية، شبين الكوم<br/>محافظة المنوفية، مصر</span>
+                <span>{settings.address}</span>
               </li>
               <li className="flex gap-3 items-center">
                 <FaPhoneAlt className="text-accent flex-shrink-0" />
-                <span dir="ltr">0100 123 4567</span>
+                <span dir="ltr">{settings.phone1}</span>
               </li>
               <li className="flex gap-3 items-center">
                 <FaEnvelope className="text-accent flex-shrink-0" />
-                <span dir="ltr">info@emadelhelwany.com</span>
+                <span dir="ltr">{settings.email1}</span>
               </li>
             </ul>
           </div>

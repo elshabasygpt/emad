@@ -137,11 +137,13 @@ app.post('/api/admin/login', async (req, res) => {
 // ----------------------------------------
 app.put('/api/admin/settings', authMiddleware, async (req, res) => {
   const settings = await prisma.siteSettings.findFirst();
+  const data = req.body;
   if (settings) {
-    const updated = await prisma.siteSettings.update({ where: { id: settings.id }, data: req.body });
+    const updated = await prisma.siteSettings.update({ where: { id: settings.id }, data });
     res.json(updated);
   } else {
-    res.status(404).json({ error: 'Settings not found' });
+    const created = await prisma.siteSettings.create({ data });
+    res.status(201).json(created);
   }
 });
 

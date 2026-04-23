@@ -2,12 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FaTrophy, FaAward, FaBriefcase, FaUsers } from 'react-icons/fa';
 
-const stats = [
-  { value: 100, label: 'رضا العملاء', suffix: '%', icon: <FaTrophy size={40} className="text-white/80" /> },
-  { value: 15, label: 'عام من الخبرة', suffix: '+', icon: <FaAward size={40} className="text-white/80" /> },
-  { value: 500, label: 'مشروع مكتمل', suffix: '+', icon: <FaBriefcase size={40} className="text-white/80" /> },
-  { value: 250, label: 'عميل', suffix: '+', icon: <FaUsers size={40} className="text-white/80" /> },
-];
+
 
 const Counter: React.FC<{ value: number; suffix: string }> = ({ value, suffix }) => {
   const [count, setCount] = useState(0);
@@ -38,6 +33,42 @@ const Counter: React.FC<{ value: number; suffix: string }> = ({ value, suffix })
 };
 
 const Stats: React.FC = () => {
+  const [settings, setSettings] = useState({
+    statSatisfaction: '100%',
+    statYears: '15+',
+    statProjects: '500+',
+    statClients: '250+',
+  });
+
+  useEffect(() => {
+    fetch('http://localhost:5000/api/settings')
+      .then(res => res.json())
+      .then(data => {
+        if (data) {
+          setSettings({
+            statSatisfaction: data.statSatisfaction || '100%',
+            statYears: data.statYears || '15+',
+            statProjects: data.statProjects || '500+',
+            statClients: data.statClients || '250+'
+          });
+        }
+      })
+      .catch(err => console.error(err));
+  }, []);
+
+  const parseStat = (str: string) => {
+    const value = parseInt(str.replace(/[^0-9]/g, '')) || 0;
+    const suffix = str.replace(/[0-9]/g, '');
+    return { value, suffix };
+  };
+
+  const dynamicStats = [
+    { ...parseStat(settings.statSatisfaction), label: 'رضا العملاء', icon: <FaTrophy size={40} className="text-white/80" /> },
+    { ...parseStat(settings.statYears), label: 'عام من الخبرة', icon: <FaAward size={40} className="text-white/80" /> },
+    { ...parseStat(settings.statProjects), label: 'مشروع مكتمل', icon: <FaBriefcase size={40} className="text-white/80" /> },
+    { ...parseStat(settings.statClients), label: 'عميل', icon: <FaUsers size={40} className="text-white/80" /> },
+  ];
+
   return (
     <section className="relative py-16 bg-primary overflow-hidden border-y border-white/10 shadow-2xl">
       {/* Industrial Background Image with Dark Blue Overlay */}
@@ -50,7 +81,7 @@ const Stats: React.FC = () => {
       <div className="container mx-auto px-6 relative z-10">
         <div className="flex flex-col md:flex-row items-center justify-between gap-8 md:gap-0">
           
-          {stats.map((stat, idx) => (
+          {dynamicStats.map((stat, idx) => (
             <motion.div 
               key={idx}
               initial={{ opacity: 0, y: 20 }}

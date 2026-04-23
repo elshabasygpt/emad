@@ -32,9 +32,21 @@ model SiteSettings {
   facebook    String?
   linkedin    String?
   youtube     String?
-  heroTitle   String   @default("عماد الحلواني للوحات الكهربائية")
-  heroSubtitle String  @default("نقدم أحدث الحلول المتكاملة في تصميم وتصنيع اللوحات الكهربائية")
-  aboutText   String   @default("نحن مصنع عماد الحلواني، رواد صناعة اللوحات الكهربائية...")
+  // Hero Section
+  heroBadge       String   @default("الجودة في كل تفصيلة")
+  heroTitle       String   @default("نصنع الكهرباء\nلنضمن استمرارية أعمالك")
+  heroDescription String   @default("متخصصون في تصميم وتصنيع لوحات الجهد المنخفض وفق أعلى معايير الجودة والسلامة العالمية لخدمة القطاعات الصناعية والتجارية.")
+
+  // About Section
+  aboutTitle      String   @default("من نحن")
+  aboutText       String   @default("نحن مصنع عماد الحلواني للوحات الكهربائية، نمتلك خبرة طويلة في مجال تصميم وتصنيع اللوحات الكهربائية بمختلف أنواعها. ونلتزم بتقديم أعلى مستويات الجودة والموثوقية لعملائنا في جميع القطاعات.")
+
+  // Stats Section
+  statClients     String   @default("250+")
+  statProjects    String   @default("500+")
+  statYears       String   @default("15+")
+  statSatisfaction String  @default("100%")
+
   updatedAt   DateTime @updatedAt
 }
 

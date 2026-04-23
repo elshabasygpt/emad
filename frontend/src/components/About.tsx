@@ -1,8 +1,28 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FaUserTie, FaAward, FaHeadset } from 'react-icons/fa';
 
 const About: React.FC = () => {
+  const [settings, setSettings] = useState({
+    aboutTitle: 'من نحن',
+    aboutText: 'نحن مصنع عماد الحلواني للوحات الكهربائية، نمتلك خبرة طويلة في مجال تصميم وتصنيع اللوحات الكهربائية بمختلف أنواعها. ونلتزم بتقديم أعلى مستويات الجودة والموثوقية لعملائنا في جميع القطاعات.'
+  });
+
+  useEffect(() => {
+    fetch('http://localhost:5000/api/settings')
+      .then(res => res.json())
+      .then(data => {
+        if (data) {
+          setSettings(prev => ({
+            ...prev,
+            aboutTitle: data.aboutTitle || prev.aboutTitle,
+            aboutText: data.aboutText || prev.aboutText
+          }));
+        }
+      })
+      .catch(err => console.error(err));
+  }, []);
+
   return (
     <section id="من نحن" className="bg-primary relative overflow-hidden">
       <div className="flex flex-col lg:flex-row min-h-[600px]">
@@ -33,13 +53,13 @@ const About: React.FC = () => {
         >
           <div className="mb-8">
             <h2 className="text-4xl lg:text-5xl font-black text-white mb-4 relative inline-block">
-              من نحن
+              {settings.aboutTitle}
               <span className="absolute -bottom-3 right-0 w-16 h-1.5 bg-accent rounded-full"></span>
             </h2>
           </div>
           
           <p className="text-gray-300 text-lg leading-relaxed mb-12 font-medium">
-            نحن مصنع عماد الحلواني للوحات الكهربائية، نمتلك خبرة طويلة في مجال تصميم وتصنيع اللوحات الكهربائية بمختلف أنواعها. ونلتزم بتقديم أعلى مستويات الجودة والموثوقية لعملائنا في جميع القطاعات.
+            {settings.aboutText}
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-12 border-t border-b border-white/10 py-8">

@@ -28,6 +28,27 @@ const featuresData = [
 
 const Hero: React.FC = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [settings, setSettings] = useState({
+    heroBadge: 'الجودة في كل تفصيلة',
+    heroTitle: 'نصنع الكهرباء\nلنضمن استمرارية أعمالك',
+    heroDescription: 'متخصصون في تصميم وتصنيع لوحات الجهد المنخفض وفق أعلى معايير الجودة والسلامة العالمية لخدمة القطاعات الصناعية والتجارية.'
+  });
+
+  useEffect(() => {
+    fetch('http://localhost:5000/api/settings')
+      .then(res => res.json())
+      .then(data => {
+        if (data) {
+          setSettings(prev => ({
+            ...prev,
+            heroBadge: data.heroBadge || prev.heroBadge,
+            heroTitle: data.heroTitle || prev.heroTitle,
+            heroDescription: data.heroDescription || prev.heroDescription
+          }));
+        }
+      })
+      .catch(err => console.error(err));
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -58,13 +79,13 @@ const Hero: React.FC = () => {
               transition={{ duration: 0.8 }}
             >
               <div className="inline-block bg-accent/10 border border-accent/20 px-4 py-1.5 rounded-full mb-6">
-                <h3 className="text-accent text-sm md:text-base font-bold tracking-wide">الجودة في كل تفصيلة</h3>
+                <h3 className="text-accent text-sm md:text-base font-bold tracking-wide">{settings.heroBadge}</h3>
               </div>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-black leading-[1.2] mb-6 drop-shadow-lg">
-                نصنع الكهرباء<br/>لنضمن استمرارية أعمالك
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-black leading-[1.2] mb-6 drop-shadow-lg whitespace-pre-line">
+                {settings.heroTitle}
               </h1>
               <p className="text-lg md:text-xl text-gray-300 mb-10 max-w-xl leading-relaxed font-medium drop-shadow-md">
-                متخصصون في تصميم وتصنيع لوحات الجهد المنخفض وفق أعلى معايير الجودة والسلامة العالمية لخدمة القطاعات الصناعية والتجارية.
+                {settings.heroDescription}
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 mb-16">
